@@ -1,0 +1,12 @@
+olist:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('DBT_PG_HOST', 'localhost') }}"
+      port: 5432
+      user: "{{ env_var('DBT_PG_USER', 'dbt_user') }}"
+      pass: "{{ env_var('DBT_ENV_SECRET_PG_PASSWORD') }}"
+      dbname: olist
+      schema: "{{ env_var('DBT_SCHEMA', 'dbt_anderson') }}"
+      threads: 4
