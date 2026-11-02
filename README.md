@@ -20,6 +20,16 @@ python -m pip install -r requirements.txt
 2. Preencha `DBT_ENV_SECRET_PG_PASSWORD` com a senha do `dbt_user`
 3. Abra a pasta `dbt-olist` no VS Code e selecione o interpretador `.venv`
 
+
+1. Copie o modelo de variáveis:
+
+   ```powershell
+   Copy-Item olist\.env.example olist\.env
+   ```
+
+2. Abra `olist/.env` e preencha `DBT_ENV_SECRET_PG_PASSWORD` com a senha do `dbt_user`
+
+
 ## Como rodar
 
 Os comandos do dbt rodam de dentro da pasta `olist`, que é de onde o `.env` e o `profiles.yml` são lidos:
