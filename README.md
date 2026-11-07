@@ -10,6 +10,8 @@ Projeto de estudo de dbt Core com dados públicos de e-commerce da Olist.
 
 ## Configuração
 
+
+
 ```powershell
 python -m venv .venv
 .venv\Scripts\Activate
@@ -28,6 +30,19 @@ python -m pip install -r requirements.txt
    ```
 
 2. Abra `olist/.env` e preencha `DBT_ENV_SECRET_PG_PASSWORD` com a senha do `dbt_user`
+
+
+## Dados
+
+1. Baixe o dataset "Brazilian E-Commerce Public Dataset by Olist" no Kaggle
+2. Extraia os 9 CSVs em `data/raw/` (a pasta é ignorada pelo Git)
+3. Carregue no schema `raw` do Postgres:
+
+```powershell
+python ingestion\load_olist.py
+```
+
+O script é idempotente: rodar de novo recarrega as tabelas sem duplicar linhas.
 
 
 ## Como rodar
