@@ -1,0 +1,23 @@
+sources:
+  - name: olist
+    description: Dados públicos de e-commerce da Olist, carregados pelo script ingestion/load_olist.py
+    schema: raw
+    tables:
+      - name: orders
+        description: Uma linha por pedido
+      - name: order_items
+        description: Uma linha por item de pedido
+      - name: order_payments
+        description: Uma linha por pagamento; um pedido pode ter vários
+      - name: order_reviews
+        description: Avaliações dos pedidos feitas pelos clientes
+      - name: customers
+        description: Uma linha por cliente em cada pedido
+      - name: sellers
+        description: Uma linha por vendedor
+      - name: products
+        description: Uma linha por produto
+      - name: geolocation
+        description: CEPs com latitude e longitude; há vários registros por CEP
+      - name: product_category_name_translation
+        description: Tradução das categorias de produto para o inglês

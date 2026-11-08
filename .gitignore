@@ -12,3 +12,7 @@ logs/
 # Segredos
 .env
 *.json
+
+# Arquivos
+data/
+
