@@ -1,0 +1,8 @@
+
+models:
+  - name: fct_orders
+    description: >
+      Uma linha por pedido. Inclui pedidos cancelados (is_canceled = true).
+      Receita oficial = revenue_amount (itens + frete, zero para cancelados).
+      Não contém seller_id: 1.278 pedidos têm mais de um vendedor;
+      a análise por vendedor usa o grão de item.
