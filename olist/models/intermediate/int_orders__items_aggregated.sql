@@ -10,16 +10,20 @@ items as (
     group by 1
 ),
 
+
 payments as (
-    select 
-	    order_id,
-	    count(*)										as qtd_formas_pgto,
-	    sum(payment_installments)						as qtd_total_parcelas,
-	    sum(payment_value)								as valor_parcela,
-	    sum(payment_value)*sum(payment_installments)	as valor_total_pgto
-from {{ ref('stg_olist__order_payments') }}
-group by 1
+
+    select
+        order_id,
+        count(*)                  as payments_count,
+        max(payment_installments) as max_installments,
+        sum(payment_value)        as paid_amount
+    from {{ ref('stg_olist__order_payments') }}
+    group by 1
+
 ),
+
+
 
 orders as (
     select * from {{ ref('stg_olist__orders') }}
@@ -31,9 +35,9 @@ select
     items.items_count,
     items.items_amount,
     items.freight_amount,
-    payments.qtd_formas_pgto,
-    payments.qtd_total_parcelas,
-    payments.valor_total_pgto
+    payments.payments_count,
+    payments.max_installments,
+    payments.paid_amount
 from orders
 left join items    using (order_id)
 left join payments using (order_id)
