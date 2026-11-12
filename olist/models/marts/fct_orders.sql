@@ -43,8 +43,8 @@ final as (
         order_amounts.payments_count,
         order_amounts.max_installments,
         case
-            when orders.delivered_to_customer_at > orders.estimated_delivery_date then 1
-            else 0
+            when orders.delivered_to_customer_at is null then null
+            else cast(orders.delivered_to_customer_at as date) > orders.estimated_delivery_date
         end as is_late
 
     from orders
