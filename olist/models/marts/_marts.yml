@@ -6,3 +6,15 @@ models:
       Receita oficial = revenue_amount (itens + frete, zero para cancelados).
       Não contém seller_id: 1.278 pedidos têm mais de um vendedor;
       a análise por vendedor usa o grão de item.
+
+  - name: dim_sellers
+    description: >
+      Uma linha por vendedor (seller_id).
+      Métricas calculadas no grão de item, só de pedidos não cancelados.
+      orders_count conta pedidos distintos; items_sold conta itens.
+
+  - name: dim_customers
+    description: >
+      Uma linha por cliente real (customer_unique_id).
+      Endereço = o do pedido mais recente.
+      Métricas calculadas a partir de fct_orders; pedidos cancelados não contam.  
