@@ -1,0 +1,6 @@
+models:
+  - name: int_orders__items_aggregated
+    description: >
+      Uma linha por pedido. Itens e pagamentos agregados por pedido antes do join,
+      para não multiplicar linhas (até 21 itens e 29 pagamentos por pedido).
+      Ephemeral: não existe no banco, entra como CTE em fct_orders.

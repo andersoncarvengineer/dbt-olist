@@ -93,5 +93,26 @@ models:
         description: valor pagamento
       - name: _loaded_at
         description: dt_ultima_carga
+  - name: stg_olist__order_items
+    description: >
+      Itens dos pedidos. Uma linha por item.
+      Chave: order_id + order_item_id (testada em tests/assert_order_items_chave_unica.sql).
+    columns:
+      - name: order_id
+        description: Pedido ao qual o item pertence. Repete em pedidos com vários itens.
+        data_tests: [not_null]
+      - name: order_item_id
+        description: Posição do item dentro do pedido (1, 2, 3...).
+        data_tests: [not_null]
 
+  - name: stg_olist__geolocation
+    description: >
+      CEPs com latitude e longitude. Há vários registros por CEP:
+      não é chave. Não faça join direto por zip_code_prefix, porque duplica linhas.
+
+  - name: stg_olist__product_category_name_translation
+    description: De-para da categoria de produto em português para o inglês.
+    columns:
+      - name: product_category_name
+        data_tests: [unique, not_null]
 
