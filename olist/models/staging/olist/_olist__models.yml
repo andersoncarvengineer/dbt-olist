@@ -38,22 +38,6 @@ models:
         data_tests: [not_null]
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   - name: stg_olist__products
     description: Tabela de Produtos
     columns:
@@ -105,7 +89,7 @@ models:
               values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
       - name: payment_installments
         description: Qtd Parcelas
-      - name: payment_values
+      - name: payment_value
         description: valor pagamento
       - name: _loaded_at
         description: dt_ultima_carga

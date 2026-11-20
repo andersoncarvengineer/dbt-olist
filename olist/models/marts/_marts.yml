@@ -1,4 +1,3 @@
-
 models:
   - name: fct_orders
     description: >
@@ -6,6 +5,33 @@ models:
       Receita oficial = revenue_amount (itens + frete, zero para cancelados).
       Não contém seller_id: 1.278 pedidos têm mais de um vendedor;
       a análise por vendedor usa o grão de item.
+    columns:
+      - name: order_id
+        description: Chave do pedido.
+        data_tests: [unique, not_null]
+      - name: customer_unique_id
+        description: Cliente real. Liga com dim_customers.
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('dim_customers')
+                field: customer_unique_id
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable',
+                         'invoiced', 'processing', 'created', 'approved']
+      - name: is_canceled
+        description: true para canceled e unavailable.
+        data_tests: [not_null]
+      - name: revenue_amount
+        description: Receita oficial. Itens + frete; zero para cancelados.
+        data_tests: [not_null]
+      - name: is_late
+        description: Entregue depois da data estimada. Nulo se ainda não foi entregue.
+      # complete você: descrição das demais colunas
 
   - name: dim_sellers
     description: >
