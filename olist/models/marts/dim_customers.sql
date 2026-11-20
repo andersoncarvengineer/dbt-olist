@@ -8,6 +8,11 @@ orders as (
     select * from {{ ref('stg_olist__orders') }}
 ),
 
+tb_region as (
+    
+    select * from {{ ref('estados_regioes') }}
+),
+
 -- endereço do pedido mais recente de cada cliente
 customer_addresses as (
 
@@ -22,7 +27,6 @@ customer_addresses as (
         ) as address_rank
     from customers
     inner join orders using (customer_id)
-
 ),
 
 latest_address as (
@@ -38,9 +42,8 @@ customer_orders as (
         max(purchased_at)                                  as last_order_at,
         count(*) filter (where not is_canceled)            as orders_count,
         sum(revenue_amount)                                as lifetime_revenue
-    from {{ ref('fct_orders') }}
+    from {{ ref('fct_orders') }} 
     group by 1
-
 ),
 
 final as (
@@ -50,6 +53,7 @@ final as (
         latest_address.zip_code_prefix,
         latest_address.city,
         latest_address.state,
+        tb_region.region                                   as region,
         customer_orders.first_order_at,
         customer_orders.last_order_at,
         customer_orders.orders_count,
@@ -58,6 +62,9 @@ final as (
     from latest_address
     left join customer_orders
         on latest_address.unique_id = customer_orders.customer_unique_id
+    left join tb_region
+        on  latest_address.state = tb_region.state
+
 
 )
 

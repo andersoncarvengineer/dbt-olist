@@ -76,6 +76,13 @@ models:
         description: Cidade do pedido mais recente.
       - name: state
         description: UF do pedido mais recente.
+      - name: region
+        description: Região do IBGE, a partir da UF (seed estados_regioes).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul']
       - name: first_order_at
         description: Data e hora do primeiro pedido, incluindo cancelados.
       - name: last_order_at
@@ -105,6 +112,13 @@ models:
         description: Cidade do vendedor.
       - name: state
         description: UF do vendedor.
+      - name: region
+        description: Região do IBGE, a partir da UF (seed estados_regioes).
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values: ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul']
       - name: orders_count
         description: Pedidos distintos válidos com itens deste vendedor.
         data_tests: [not_null]
@@ -118,3 +132,4 @@ models:
         description: Primeira venda válida. Nulo para os 42 vendedores sem venda válida.
       - name: last_sale_at
         description: Última venda válida. Nulo para os 42 vendedores sem venda válida.
+  

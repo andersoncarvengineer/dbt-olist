@@ -1,0 +1,12 @@
+seeds:
+  - name: estados_regioes
+    description: De-para das 27 UFs do Brasil para as 5 regiões do IBGE.
+    columns:
+      - name: state
+        description: Sigla da UF. Liga com o campo state de clientes e vendedores.
+        data_tests: [unique, not_null]
+      - name: region
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Norte', 'Nordeste', 'Centro-Oeste', 'Sudeste', 'Sul']
