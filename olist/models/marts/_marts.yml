@@ -31,16 +31,90 @@ models:
         data_tests: [not_null]
       - name: is_late
         description: Entregue depois da data estimada. Nulo se ainda não foi entregue.
-      # complete você: descrição das demais colunas
+      - name: purchased_at
+        description: data e hora da compra
+        data_tests: [not_null]
+      - name: purchase_date
+        description:  data da compra
+        data_tests: [not_null]
+      - name: delivered_to_customer_at
+        description:  data da entrega
+      - name: estimated_delivery_date
+        description:  data prevista para entrega
+      - name: items_count
+        description:  qtd de items
+      - name: items_amount
+        description:  Soma do preço dos itens do pedido, sem frete.
+      - name: freight_amount
+        description:  Soma do frete dos itens do pedido
+      - name: order_amount 
+        description:  Itens + frete, incluindo cancelados. Para receita, use revenue_amount.
+      - name: paid_amount
+        description:  valor pago (valor pode ser nulo)
+      - name: payments_count 
+        description:  qtd de pagamentos
+      - name: max_installments
+        description: qtd máxima de parcelas
+
+
+
+
+
+
+  - name: dim_customers
+    description: >
+      Uma linha por cliente real (customer_unique_id).
+      Endereço = o do pedido mais recente.
+      Métricas calculadas a partir de fct_orders; pedidos cancelados não contam.
+    columns:
+      - name: customer_unique_id
+        description: Chave do cliente real.
+        data_tests: [unique, not_null]
+      - name: zip_code_prefix
+        description: CEP (5 primeiros dígitos) do pedido mais recente.
+      - name: city
+        description: Cidade do pedido mais recente.
+      - name: state
+        description: UF do pedido mais recente.
+      - name: first_order_at
+        description: Data e hora do primeiro pedido, incluindo cancelados.
+      - name: last_order_at
+        description: Data e hora do pedido mais recente, incluindo cancelados.
+      - name: orders_count
+        description: Pedidos válidos (não cancelados). Zero se o cliente só cancelou.
+        data_tests: [not_null]
+      - name: lifetime_revenue
+        description: Soma da receita oficial (revenue_amount) do cliente.
+        data_tests: [not_null]
+      - name: is_repeat_buyer
+        description: true se tem mais de um pedido válido.
+        data_tests: [not_null]
 
   - name: dim_sellers
     description: >
       Uma linha por vendedor (seller_id).
       Métricas calculadas no grão de item, só de pedidos não cancelados.
       orders_count conta pedidos distintos; items_sold conta itens.
-
-  - name: dim_customers
-    description: >
-      Uma linha por cliente real (customer_unique_id).
-      Endereço = o do pedido mais recente.
-      Métricas calculadas a partir de fct_orders; pedidos cancelados não contam.  
+    columns:
+      - name: seller_id
+        description: Chave do vendedor.
+        data_tests: [unique, not_null]
+      - name: zip_code_prefix
+        description: CEP (5 primeiros dígitos) do vendedor.
+      - name: city
+        description: Cidade do vendedor.
+      - name: state
+        description: UF do vendedor.
+      - name: orders_count
+        description: Pedidos distintos válidos com itens deste vendedor.
+        data_tests: [not_null]
+      - name: items_sold
+        description: Itens vendidos em pedidos válidos.
+        data_tests: [not_null]
+      - name: revenue_amount
+        description: Itens + frete dos itens deste vendedor em pedidos válidos.
+        data_tests: [not_null]
+      - name: first_sale_at
+        description: Primeira venda válida. Nulo para os 42 vendedores sem venda válida.
+      - name: last_sale_at
+        description: Última venda válida. Nulo para os 42 vendedores sem venda válida.
