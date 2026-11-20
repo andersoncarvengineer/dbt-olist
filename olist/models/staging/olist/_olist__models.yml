@@ -1,0 +1,118 @@
+models:
+  - name: stg_olist__orders
+    description: Pedidos da Olist. Uma linha por pedido.
+    columns:
+      - name: order_id
+        description: Chave do pedido.
+        data_tests: [unique, not_null]
+      - name: customer_id
+        description: Cliente daquele pedido (muda a cada pedido; a pessoa é o unique_id).
+        data_tests: [not_null]
+      - name: status
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['delivered', 'shipped', 'canceled', 'unavailable',
+                         'invoiced', 'processing', 'created', 'approved']
+
+  - name: stg_olist__customers
+    description: Uma linha por cliente em cada pedido.
+    columns:
+      - name: customer_id
+        data_tests: [unique, not_null]
+      - name: unique_id
+        description: Identifica a pessoa. Repete quando o cliente compra mais de uma vez.
+        data_tests: [not_null]
+
+  - name: stg_olist__order_reviews
+    description: >
+      Avaliações dos pedidos. Chave: review_id + order_id
+      (testada em tests/assert_order_reviews_chave_unica.sql).
+      Um review_id pode cobrir vários pedidos, e um pedido pode ter várias reviews.
+    columns:
+      - name: review_id
+        description: Avaliação. Não é única sozinha.
+        data_tests: [not_null]
+      - name: order_id
+        description: Pedido avaliado. Repete em 547 pedidos com mais de uma review.
+        data_tests: [not_null]
+
+
+  - name: stg_olist__products
+    description: Tabela de Produtos
+    columns:
+      - name: product_id
+        description:  Id do produto
+        data_tests: [unique, not_null]
+
+      - name: product_category_name
+        description: Categoria do produto
+      - name: name_length
+      - name: descriptiod_length
+      - name: photos_qty
+      - name: weigth_g
+      - name: length_cm
+      - name: height_cm
+      - name: width_cm
+      - name: _loaded_at
+        description: dt_ultima_carga
+
+
+
+  - name: stg_olist__sellers
+    description: Tabela de Vendedores
+    columns:
+      - name: seller_id
+        description: chave primaria da tabela
+        data_tests: [unique, not_null]
+      - name: seller_zip_code_prefix
+        description: CEP do Vendedores
+      - name: seller_city
+        description: Cidade do Vendedor
+      - name: seller_state
+        description: UF do Vendedor
+      - name: _loaded_at
+        description: dt_ultima_carga
+
+  - name: stg_olist__order_payments
+    description: Tabela de Pagamento de Pedidos
+    columns:
+      - name: order_id
+        description: chave de pagamento de pedidos
+      - name: payment_sequential
+        description: codigo sequencial de pagamento
+      - name: payment_type
+        description: forma de pagamento
+        data_tests:
+        - accepted_values:
+            arguments:
+              values: ['credit_card', 'boleto', 'voucher', 'debit_card', 'not_defined']
+      - name: payment_installments
+        description: Qtd Parcelas
+      - name: payment_value
+        description: valor pagamento
+      - name: _loaded_at
+        description: dt_ultima_carga
+  - name: stg_olist__order_items
+    description: >
+      Itens dos pedidos. Uma linha por item.
+      Chave: order_id + order_item_id (testada em tests/assert_order_items_chave_unica.sql).
+    columns:
+      - name: order_id
+        description: Pedido ao qual o item pertence. Repete em pedidos com vários itens.
+        data_tests: [not_null]
+      - name: order_item_id
+        description: Posição do item dentro do pedido (1, 2, 3...).
+        data_tests: [not_null]
+
+  - name: stg_olist__geolocation
+    description: >
+      CEPs com latitude e longitude. Há vários registros por CEP:
+      não é chave. Não faça join direto por zip_code_prefix, porque duplica linhas.
+
+  - name: stg_olist__product_category_name_translation
+    description: De-para da categoria de produto em português para o inglês.
+    columns:
+      - name: product_category_name
+        data_tests: [unique, not_null]
+

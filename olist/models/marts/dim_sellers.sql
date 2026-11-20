@@ -13,6 +13,12 @@ orders as (
     from {{ ref('fct_orders') }}
 ),
 
+tb_region as (
+
+    select * from {{ ref('estados_regioes') }}
+),
+
+
 -- só itens de pedidos válidos
 valid_items as (
 
@@ -49,6 +55,7 @@ final as (
         sellers.seller_zip_code_prefix                     as zip_code_prefix,
         sellers.seller_city                                as city,
         sellers.seller_state                               as state,
+        tb_region.region                                   as region,
         coalesce(seller_sales.orders_count, 0)             as orders_count,
         coalesce(seller_sales.items_sold, 0)               as items_sold,
         coalesce(seller_sales.revenue_amount, 0)           as revenue_amount,
@@ -56,6 +63,7 @@ final as (
         seller_sales.last_sale_at
     from sellers
     left join seller_sales using (seller_id)
+    left join tb_region on sellers.seller_state = tb_region.state
 
 )
 

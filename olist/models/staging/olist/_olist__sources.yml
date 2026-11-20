@@ -21,3 +21,5 @@ sources:
         description: CEPs com latitude e longitude; há vários registros por CEP
       - name: product_category_name_translation
         description: Tradução das categorias de produto para o inglês
+
+    
