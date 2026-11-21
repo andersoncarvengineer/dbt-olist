@@ -9,10 +9,10 @@ renamed as (
 
     select
         order_id,
-        cast(payment_sequential as int)      as payment_sequential,
+        cast(payment_sequential as int)         as payment_sequential,
         payment_type,
-        cast(payment_installments as int)    as payment_installments,
-        cast(payment_value as numeric(12,2)) as payment_value, 
+        cast(payment_installments as int)       as payment_installments,
+        {{ to_reais('payment_value') }}         as payment_value, 
         _loaded_at
     from source
 )

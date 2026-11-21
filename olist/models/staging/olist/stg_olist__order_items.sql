@@ -13,8 +13,8 @@ select
     product_id,
     seller_id,
     cast(shipping_limit_date as timestamp with time zone) as shipping_limit_at,
-    cast(price as numeric(12,2)) as price,
-    cast(freight_value as numeric(12,2)) as freight_value,
+    {{ to_reais('price') }}         as price,
+    {{ to_reais('freight_value') }} as freight_value,
     _loaded_at
 from source
 

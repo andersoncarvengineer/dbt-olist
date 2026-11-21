@@ -519,3 +519,6 @@ Na pasta dbt-olist, crie a branch docs/diario.
 Crie o DIARIO.md na raiz com os aprendizados dos Dias 1 a 5.
 Commit, push, PR, revisão, squash and merge.
 checkout main, pull, apagar a branch local.
+
+
+a lição de hoje é das que se esquece fácil. Algo como: "Ingestão com replace derruba as views do staging. Use truncate + append numa transação, e nunca CASCADE."

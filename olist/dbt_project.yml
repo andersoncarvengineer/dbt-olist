@@ -21,7 +21,6 @@ models:
   olist:
     staging:      { +materialized: view }
     intermediate: { +materialized: ephemeral }
-    marts:        { +materialized: table }
- 
-
- 
+    marts:
+      +materialized: table
+      +tags: ['diario', 'power_bi']
