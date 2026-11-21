@@ -6,7 +6,7 @@ from pathlib import Path
 
 import pandas as pd
 from dotenv import load_dotenv
-from sqlalchemy import create_engine, text
+from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.engine import URL
 
 RAIZ = Path(__file__).resolve().parents[1]
@@ -38,8 +38,15 @@ def carregar(engine, arquivo: Path) -> None:
     tabela = nome_da_tabela(arquivo)
     df = pd.read_csv(arquivo, dtype=str)
     df["_loaded_at"] = pd.Timestamp.now(tz="UTC")
-    df.to_sql(tabela, engine, schema=SCHEMA, if_exists="replace",
-              index=False, chunksize=10_000, method="multi")
+
+    # Uma transação só: se a inserção falhar, o TRUNCATE é desfeito
+    # e a tabela continua com os dados da carga anterior.
+    with engine.begin() as conn:
+        if inspect(conn).has_table(tabela, schema=SCHEMA):
+            conn.execute(text(f"truncate table {SCHEMA}.{tabela}"))
+        df.to_sql(tabela, conn, schema=SCHEMA, if_exists="append",
+                  index=False, chunksize=10_000, method="multi")
+
     log.info("%s: %s linhas carregadas", tabela, f"{len(df):,}")
 
 
